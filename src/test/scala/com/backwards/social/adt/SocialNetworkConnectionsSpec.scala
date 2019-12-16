@@ -8,13 +8,6 @@ import com.backwards.social.adt.SocialNetworkConnectionsCodec._
 class SocialNetworkConnectionsSpec extends AnyWordSpec with Matchers with SocialNetworkConnectionsFixture {
   spec =>
 
-  "Social network connections ADT" should {
-    "be decoded from JSON" in {
-      val Right(adt) = facebookSocialNetworkConnections.as[SocialNetworkConnections]
-      adt.sn mustEqual Facebook
-    }
-  }
-
   // TODO - Should have used data tables in the following examples and avoid the extra "objects" in SocialNetworkConnectionsFixture
   "Social network connections" should {
     val Right(facebookSocialNetworkConnections) = spec.facebookSocialNetworkConnections.as[SocialNetworkConnections]
