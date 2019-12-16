@@ -14,9 +14,12 @@ import org.http4s.{HttpRoutes, Uri, _}
 import org.scalatest.matchers.must.Matchers
 import org.scalatest.wordspec.AnyWordSpec
 import com.backwards.social.adt._
+import com.backwards.social.algebra.{Networking, NetworkingInterpreter}
 
 class SocialNetworkRoutesSpec extends AnyWordSpec with Matchers with Http4sDsl[IO] with Http4sClientDsl[IO] with EntityCodecs with SocialNetworkConnectionsFixture {
   implicit val cs: ContextShift[IO] = IO.contextShift(scala.concurrent.ExecutionContext.global)
+
+  val networking: Networking[IO] = new NetworkingInterpreter[IO]
 
   val socialNetworkConnections: SocialNetwork => SocialNetworkConnections =
     SocialNetworkConnections(_, List(User("bob"), User("nomates")), List(HasConnection(tag[StartNode](User("bob")), tag[EndNode](User("su")))))
@@ -26,7 +29,7 @@ class SocialNetworkRoutesSpec extends AnyWordSpec with Matchers with Http4sDsl[I
       .whenRequestMatches(_ => true)
       .thenRespond(Right(socialNetworkConnections(Facebook)))
 
-    val routes: HttpRoutes[IO] = SocialNetworkRoutes[IO]
+    val routes: HttpRoutes[IO] = SocialNetworkRoutes[IO](networking)
 
     "get users which have no relationships" in {
       val response: Response[IO] =
@@ -42,7 +45,7 @@ class SocialNetworkRoutesSpec extends AnyWordSpec with Matchers with Http4sDsl[I
       .whenRequestMatches(_ => true)
       .thenRespond(Right(socialNetworkConnections(Twitter)))
 
-    val routes: HttpRoutes[IO] = SocialNetworkRoutes[IO]
+    val routes: HttpRoutes[IO] = SocialNetworkRoutes[IO](networking)
 
     "get users which have no relationships" in {
       val response: Response[IO] =

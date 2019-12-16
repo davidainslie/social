@@ -8,6 +8,7 @@ import sttp.model.Methods
 import org.http4s.HttpRoutes
 import com.backwards.social.adt.SocialNetworkConnectionsCodec._
 import com.backwards.social.adt.{SocialNetworkConnections, SocialNetworkConnectionsFixture}
+import com.backwards.social.algebra.NetworkingInterpreter
 import com.backwards.social.frontend.SocialNetworkRoutes
 
 object RunnerSpec extends RunnerApp with Methods with SocialNetworkConnectionsFixture {
@@ -15,5 +16,6 @@ object RunnerSpec extends RunnerApp with Methods with SocialNetworkConnectionsFi
     .whenRequestMatches(r => r.method == GET && r.uri.toString.endsWith("facebook"))
     .thenRespond(facebookSocialNetworkConnections.as[SocialNetworkConnections])
 
-  val routes: HttpRoutes[IO] = SocialNetworkRoutes[IO]
+  val routes: HttpRoutes[IO] =
+    SocialNetworkRoutes[IO](new NetworkingInterpreter[IO])
 }
