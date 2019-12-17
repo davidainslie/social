@@ -1,6 +1,5 @@
 package com.backwards.social.adt
 
-import scala.language.postfixOps
 import cats.implicits._
 import com.backwards.social.ops._
 
@@ -10,25 +9,24 @@ object SocialNetworkConnections {
   def noRelationships(socialNetworkConnections: SocialNetworkConnections): List[User] = {
     val usersWithRelationships: List[User] = socialNetworkConnections.relationships.collect {
       case HasConnection(startNode, endNode) => List[User](startNode, endNode)
-    } flatten
+    }.flatten
 
     socialNetworkConnections.people.filterNot(usersWithRelationships.contains)
   }
 
-  def firstDegreeCount(user: User): SocialNetworkConnections => FirstDegreeCount =
+  def firstDegreeUsers(user: User): SocialNetworkConnections => Set[User] =
     _.relationships.collect {
-      case HasConnection(startNode, endNode) => List[User](startNode, endNode) contains user
-    }.count(_ == true) |> FirstDegreeCount
-
-  def secondDegreeCount(user: User): SocialNetworkConnections => SecondDegreeCount = { socialNetworkConnections =>
-    val firstDegreeUsers: List[User] = socialNetworkConnections.relationships.collect {
       case HasConnection(startNode, endNode) if List[User](startNode, endNode).contains(user) =>
         List[User](startNode, endNode).diff(List(user))
-    } flatten
+    }.flatten.toSet
 
+  def firstDegreeCount(user: User): SocialNetworkConnections => FirstDegreeCount =
+    firstDegreeUsers(user)(_).size |> FirstDegreeCount
+
+  def secondDegreeCount(user: User): SocialNetworkConnections => SecondDegreeCount = { socialNetworkConnections =>
     val secondDegreeUsers = socialNetworkConnections.relationships.collect {
       case HasConnection(startNode, endNode) =>
-        List[User](startNode, endNode).diff(firstDegreeUsers :+ user)
+        Set[User](startNode, endNode).diff(firstDegreeUsers(user)(socialNetworkConnections) + user)
     }.flatten.toSet
 
     secondDegreeUsers.size |> SecondDegreeCount

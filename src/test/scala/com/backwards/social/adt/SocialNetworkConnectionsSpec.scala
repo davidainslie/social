@@ -16,10 +16,11 @@ class SocialNetworkConnectionsSpec extends AnyWordSpec with Matchers with TableD
       noRelationships(facebookSocialNetworkConnections) mustEqual List(User("Harry"))
     }
 
-    "give degree counts for a given user" in {
-      val firstDegree = SocialNetworkConnections.firstDegreeCount(_: User)(facebookSocialNetworkConnections)
-      val secondDegree = SocialNetworkConnections.secondDegreeCount(_: User)(facebookSocialNetworkConnections)
+    "give first degree users for a given user" in {
+      firstDegreeUsers(User("John"))(facebookSocialNetworkConnections) mustEqual Set(User("Peter"), User("George"))
+    }
 
+    "give degree counts for a given user" in {
       val users = Table(
         ("User",        "First Degree Count",   "Second Degree Count"),
         (User("John"),  FirstDegreeCount(2),    SecondDegreeCount(1)),
@@ -27,9 +28,9 @@ class SocialNetworkConnectionsSpec extends AnyWordSpec with Matchers with TableD
         (User("Anna"),  FirstDegreeCount(1),    SecondDegreeCount(2))
       )
 
-      forAll(users) { (user: User, firstDegreeCount: FirstDegreeCount, secondDegreeCount: SecondDegreeCount) =>
-        firstDegree(user) mustEqual firstDegreeCount
-        secondDegree(user) mustEqual secondDegreeCount
+      forAll(users) { (user: User, fdc: FirstDegreeCount, sdc: SecondDegreeCount) =>
+        firstDegreeCount(user)(facebookSocialNetworkConnections) mustEqual fdc
+        secondDegreeCount(user)(facebookSocialNetworkConnections) mustEqual sdc
       }
     }
   }
