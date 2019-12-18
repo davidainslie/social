@@ -1,6 +1,5 @@
 package com.backwards.social.frontend
 
-import cats.MonadError
 import cats.effect.Effect
 import sttp.client.{NothingT, SttpBackend}
 import org.http4s.dsl.Http4sDsl
@@ -10,8 +9,9 @@ import com.backwards.social.algebra.Networking
 import com.backwards.social.backend.SocialNetworkApi._
 import com.backwards.social.frontend.EntityCodecs._
 
-class SocialNetworkRoutes[F[_]: Effect](networking: Networking[F])(implicit Backend: SttpBackend[F, Nothing, NothingT], M: MonadError[F, Throwable]) extends Http4sDsl[F] {
-  import M._
+class SocialNetworkRoutes[F[_]: Effect](networking: Networking[F])(implicit Backend: SttpBackend[F, Nothing, NothingT]) extends Http4sDsl[F] {
+  val effect: Effect[F] = implicitly[Effect[F]]
+  import effect._
 
   val routes: HttpRoutes[F] = HttpRoutes.of[F] {
     // TODO - Join endpoints for Facebook and Twitter for a user e.g.
@@ -37,6 +37,6 @@ class SocialNetworkRoutes[F[_]: Effect](networking: Networking[F])(implicit Back
 }
 
 object SocialNetworkRoutes {
-  def apply[F[_]: Effect](networking: Networking[F])(implicit Backend: SttpBackend[F, Nothing, NothingT], M: MonadError[F, Throwable]): HttpRoutes[F] =
+  def apply[F[_]: Effect](networking: Networking[F])(implicit Backend: SttpBackend[F, Nothing, NothingT]): HttpRoutes[F] =
     new SocialNetworkRoutes[F](networking).routes
 }
