@@ -97,7 +97,7 @@ Return count of relationships of 1 degree + count of relationships of 2 degree
 From the command line:
 
 ```bash
-http http://localhost:8080/relationships/Peter
+http http://localhost:8080/relationships/facebook/Peter
 HTTP/1.1 200 OK
 Content-Length: 44
 Content-Type: application/json

@@ -38,6 +38,8 @@ class SocialNetworkRoutesSpec extends AnyWordSpec with Matchers with Http4sDsl[I
       response.status mustEqual Status.Ok
       response.as[Json].unsafeRunSync.as[List[String]] mustEqual List("nomates").asRight
     }
+
+    // TODO - Missing test for API where user name is provided
   }
 
   "Twitter social network routes" should {
@@ -54,5 +56,7 @@ class SocialNetworkRoutesSpec extends AnyWordSpec with Matchers with Http4sDsl[I
       response.status mustEqual Status.Ok
       response.as[Json].unsafeRunSync.as[List[String]] mustEqual List("nomates").asRight
     }
+
+    // TODO - Missing test for API where user name is provided
   }
 }
