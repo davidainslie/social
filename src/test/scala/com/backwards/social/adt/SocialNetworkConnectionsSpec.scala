@@ -22,10 +22,12 @@ class SocialNetworkConnectionsSpec extends AnyWordSpec with Matchers with TableD
 
     "give degree counts for a given user" in {
       val users = Table(
-        ("User",        "First Degree Count",   "Second Degree Count"),
-        (User("John"),  FirstDegreeCount(2),    SecondDegreeCount(1)),
-        (User("Peter"), FirstDegreeCount(3),    SecondDegreeCount(0)),
-        (User("Anna"),  FirstDegreeCount(1),    SecondDegreeCount(2))
+        ("User",          "First Degree Count",   "Second Degree Count"),
+        (User("John"),    FirstDegreeCount(2),    SecondDegreeCount(1)),
+        (User("Peter"),   FirstDegreeCount(3),    SecondDegreeCount(0)),
+        (User("George"),  FirstDegreeCount(2),    SecondDegreeCount(1)),
+        (User("Harry"),   FirstDegreeCount(0),    SecondDegreeCount(0)),
+        (User("Anna"),    FirstDegreeCount(1),    SecondDegreeCount(2))
       )
 
       forAll(users) { (user: User, fdc: FirstDegreeCount, sdc: SecondDegreeCount) =>

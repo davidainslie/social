@@ -24,10 +24,14 @@ object SocialNetworkConnections {
     firstDegreeUsers(user)(_).size |> FirstDegreeCount
 
   def secondDegreeCount(user: User): SocialNetworkConnections => SecondDegreeCount = { socialNetworkConnections =>
-    val secondDegreeUsers = socialNetworkConnections.relationships.collect {
-      case HasConnection(startNode, endNode) =>
-        Set[User](startNode, endNode).diff(firstDegreeUsers(user)(socialNetworkConnections) + user)
-    }.flatten.toSet
+    val secondDegreeUsers = firstDegreeUsers(user)(socialNetworkConnections) match {
+      case firstDegreeUsers if firstDegreeUsers.nonEmpty => socialNetworkConnections.relationships.collect {
+        case HasConnection(startNode, endNode) =>
+          Set[User](startNode, endNode).diff(firstDegreeUsers + user)
+      }.flatten.toSet
+
+      case _ => Set.empty[User]
+    }
 
     secondDegreeUsers.size |> SecondDegreeCount
   }
