@@ -33,7 +33,7 @@ class SocialNetworkRoutesSpec extends AnyWordSpec with Matchers with Http4sDsl[I
 
     "get users which have no relationships" in {
       val response: Response[IO] =
-        GET(Uri.uri("/facebook/no-relationships")).flatMap(routes.orNotFound.run).unsafeRunSync
+        GET(Uri.uri("/relationships/facebook")).flatMap(routes.orNotFound.run).unsafeRunSync
 
       response.status mustEqual Status.Ok
       response.as[Json].unsafeRunSync.as[List[String]] mustEqual List("nomates").asRight
@@ -49,7 +49,7 @@ class SocialNetworkRoutesSpec extends AnyWordSpec with Matchers with Http4sDsl[I
 
     "get users which have no relationships" in {
       val response: Response[IO] =
-        GET(Uri.uri("/twitter/no-relationships")).flatMap(routes.orNotFound.run).unsafeRunSync
+        GET(Uri.uri("/relationships/twitter")).flatMap(routes.orNotFound.run).unsafeRunSync
 
       response.status mustEqual Status.Ok
       response.as[Json].unsafeRunSync.as[List[String]] mustEqual List("nomates").asRight

@@ -14,13 +14,13 @@ class SocialNetworkRoutes[F[_]: Effect](networking: Networking[F])(implicit Back
   import M._
 
   val routes: HttpRoutes[F] = HttpRoutes.of[F] {
-    case GET -> Root / "facebook" / "no-relationships" =>
+    case GET -> Root / "relationships" / "facebook" =>
       apply(networking.noRelationships(Facebook))
 
-    case GET -> Root / "twitter" / "no-relationships" =>
+    case GET -> Root / "relationships" / "twitter" =>
       apply(networking.noRelationships(Twitter))
 
-    case GET -> Root / "relationship-count" / userName =>
+    case GET -> Root / "relationships" / userName =>
       // TODO - Currently only accessing Facebook. Either access Twitter as well and combine or allow greater flexibility in this endpoint
       flatMap(attempt(networking.relationshipCount(Facebook, User(userName)))) {
         case Right(degreeCounts) => Ok(degreeCounts)

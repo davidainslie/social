@@ -74,7 +74,7 @@ Return count of people with no relationships
 From the command line:
 
 ```bash
-$ http http://localhost:8080/facebook/no-relationships
+$ http http://localhost:8080/relationships/facebook
 HTTP/1.1 200 OK
 Content-Length: 9
 Content-Type: application/json
@@ -97,7 +97,7 @@ Return count of relationships of 1 degree + count of relationships of 2 degree
 From the command line:
 
 ```bash
-http http://localhost:8080/relationship-count/Peter
+http http://localhost:8080/relationships/Peter
 HTTP/1.1 200 OK
 Content-Length: 44
 Content-Type: application/json
