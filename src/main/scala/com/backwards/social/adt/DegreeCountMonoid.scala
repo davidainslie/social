@@ -6,14 +6,14 @@ import cats.implicits._
 object DegreeCountMonoid {
   implicit val firstDegreeCountMonoid: Monoid[FirstDegreeCount] = {
     def combineFirstDegreeCounts(f1: FirstDegreeCount, f2: FirstDegreeCount): FirstDegreeCount =
-      FirstDegreeCount(f1.value + f2.value)
+      FirstDegreeCount(f1.value |+| f2.value)
 
     Monoid.instance[FirstDegreeCount](FirstDegreeCount(0), combineFirstDegreeCounts)
   }
 
   implicit val secondDegreeCountMonoid: Monoid[SecondDegreeCount] = {
     def combineSecondDegreeCounts(s1: SecondDegreeCount, s2: SecondDegreeCount): SecondDegreeCount =
-      SecondDegreeCount(s1.value + s2.value)
+      SecondDegreeCount(s1.value |+| s2.value)
 
     Monoid.instance[SecondDegreeCount](SecondDegreeCount(0), combineSecondDegreeCounts)
   }
