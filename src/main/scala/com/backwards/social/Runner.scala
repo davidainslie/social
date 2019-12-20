@@ -12,5 +12,5 @@ object Runner extends RunnerApp {
   implicit val backend: SttpBackend[IO, Nothing, NothingT] = AsyncHttpClientCatsBackend[IO]().unsafeRunSync()
 
   val routes: HttpRoutes[IO] =
-    HealthRoutes[IO] <+> SocialNetworkRoutes[IO](new NetworkingInterpreter[IO])
+    HealthRoutes[IO] <+> SocialNetworkRoutes[IO](NetworkingInterpreter[IO])
 }

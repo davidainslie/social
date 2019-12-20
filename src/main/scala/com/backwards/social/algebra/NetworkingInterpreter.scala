@@ -16,3 +16,7 @@ class NetworkingInterpreter[F[_]: Monad] extends Networking[F] {
     (connections.map(firstDegreeCount(user)), connections.map(secondDegreeCount(user))).mapN(DegreeCounts)
   }
 }
+
+object NetworkingInterpreter {
+  def apply[F[_]: Monad] = new NetworkingInterpreter[F]
+}

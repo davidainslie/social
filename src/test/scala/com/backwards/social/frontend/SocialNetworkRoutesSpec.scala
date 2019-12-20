@@ -19,7 +19,7 @@ import com.backwards.social.algebra.{Networking, NetworkingInterpreter}
 class SocialNetworkRoutesSpec extends AnyWordSpec with Matchers with Http4sDsl[IO] with Http4sClientDsl[IO] with EntityCodecs with SocialNetworkConnectionsFixture {
   implicit val cs: ContextShift[IO] = IO.contextShift(scala.concurrent.ExecutionContext.global)
 
-  val networking: Networking[IO] = new NetworkingInterpreter[IO]
+  val networking: Networking[IO] = NetworkingInterpreter[IO]
 
   val socialNetworkConnections: SocialNetwork => SocialNetworkConnections =
     SocialNetworkConnections(_, List(User("bob"), User("nomates")), List(HasConnection(tag[StartNode](User("bob")), tag[EndNode](User("su")))))
